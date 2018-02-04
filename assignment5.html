@@ -315,7 +315,7 @@ spots in the code base for each one. </p>
     double distance (Node a)</span> that will get the distance to the specified node.</p>
 
 
-<div class="attention">You can assume that the graph is connected for this assignment, but this is not necessarily the case for every application. Thing about how that assumption simplifies things. </div>
+<div class="attention">You can assume that the graph is connected for this assignment, but this is not necessarily the case for every application. Think about how that assumption simplifies things. </div>
 
 &nbsp;
 
@@ -325,7 +325,7 @@ spots in the code base for each one. </p>
 
 <p>The visualizer will show off your MST when you type m or k depending on which algorithm you implemented. You can rebuild the visualizer just by running <span class="code">make</span> from the command line while in the assignment's codebase directory. You can then run the visualizer by running <span class="code">GraphApp</span> from the same directory.</p>
 
-<p>To recompute the MST, press the r or c key while the visualizer is running. This will clean up the old graph and build a completely new one. Then you can hit k or m against to compute the MST.</p>
+<p>To recompute the MST, press the r or c key while the visualizer is running. This will clean up the old graph and build a completely new one. Then you can hit k or m again to compute the MST.</p>
 
 <h3>Part 2: Single-Source Shortest-Path</h3>
 
@@ -352,7 +352,7 @@ spots in the code base for each one. </p>
 
 <p><div class="points easy">4</div>Now open up <span class="code">GraphAlgorithms.cpp</span> in the assignment's source tree, and scroll down to <span class="code">void findShortestPath(int start, int end, Graph g, GraphApp *app) </span>. This is the function you will need to implement.</p>
 
-<p>This function declaration might be scary-looking, but it's actually not too bad: the function takes a source and destination node and a graph structure detailing the nodes and all of the edges in the graph, and returns a shortest path.</p>
+<p>This function declaration might look scary, but it's actually not too bad: the function takes a source and destination node and a graph structure detailing the nodes and all of the edges in the graph, and returns a shortest path.</p>
 
 <p><div class="points hard">3</div>You'll need a way to pick nodes according to some metric that will constantly be changing. There's no easy way to do this, unfortunately; not even <span class="code">std::priority_queue</span> will help you, because it doesn't support <span class="code">decreaseKey</span>. We've found that just using an <span class="code">std::vector</span> is good enough; since you're not computing lots of shortest paths, the performance penalty is not large (the algorithm takes a few seconds worst-case). However, for extra points, you can use a binary heap, Fibonacci heap, or similar data structure to make your algorithm much faster. See the relevant notes on Moodle if you want hints on how that's done. You can also look at Wikipedia and other resources (no pseudocode though) </p>
 
