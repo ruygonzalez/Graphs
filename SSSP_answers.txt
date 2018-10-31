@@ -1,0 +1,24 @@
+Question:
+First, let's start off looking just at the source node. If we're trying to minimize the path length, which neighbor does it make the most sense to investigate first?
+
+Answer:
+	It makes the most sense to investigate the closest neighbor, i.e. the one with the shortest path length/smallest edge weight from the source node. Since that is for sure the shortest path length from the source node to that node. Although technically the first thing is the path length from the source node to itself is zero therefore that's the first thing you do. 
+
+Question:
+Now we have shortest paths to two nodes (or eventually three nodes, or eventually N nodes). Notice that, at least in the two-nodes case, both of these paths are shortest paths: one of them is trivial, and the other may be proven minimal by contradiction. If we're trying to minimize the path length to the goal - which we have not yet found using our algorithm - which node does it make the most sense to investigate at each further step? 
+
+Answer:
+It always makes the most sense to investigate the node with the shortest path from the source node to that node because it is likely that it is part of the shortest path from the source node to the neighboring nodes of that node. I.e. the closest unvisited node.
+
+Question:
+What else should we be doing at each step, if anything, to ensure that we'll end with a result that makes sense? Why does doing this end up yielding a shortest path to another node? (Does it?)
+Hint: You may need to attach some additional information to each node.
+
+Answer:
+At each node, store the shortest path from the source node to that node. Therefore we don't have to check the distance from the source node to another node from the beginning everytime, we know that the shortest path from the source node to another node is just the shortest path from the source node to another node and then the shortest path from that node to the desired node (with other nodes in between). 
+
+Question:
+Suppose we've done many iterations and have now found our goal. How do we know that we're done? How can we now derive the path we want?
+
+Answer:
+You know you're done when you've visited all the nodes in the graph or at least the goal node and all the nodes adjacent to it (from behind not in front of it, so all the ones that get you to the goal not the ones you can get to from the node). We can derive the path we want if we at each node we also store the node that it came from that allows it to have the shortest path from the source. Then we can start from the goal node and trace our way back to the source node. 

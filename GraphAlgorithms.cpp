@@ -50,15 +50,96 @@
  * You can assume that the graph is completely connected. Also, we only use
  * existing edges for the MST.
  *
- * Add your outline here
+ * OUTLINE:
+ * onMST.erase(onMST.begin(), onMST.end());
+ * notOnMST.erase(notOnMST.begin(), notOnMST.end());
+ * FOR i = 0 TO g.nodes.size() DO
+ *  notOnMST.push_back(g.nodes[i])
+ * ENDFOR
+ * NODE * a = notOnMST.pop()
+ * onMST.push_back(a)
+ * WHILE notOnMST.size() > 0 DO
+ *  Node* a
+ *  Node* b
+ *  int distance = 1000000
+ *  FOR i = 0 TO onMST.size() DO
+ *      Node* temp = onMST[i]
+ *      FOR j = 0 TO temp.edges.size() DO
+ *          int temp2 = temp.distance(temp.edges[j])
+ *          IF temp2 < distance THEN
+ *              bool already = false
+ *              FOR k = 0 TO onMST.size() DO
+ *                  IF onMST[k].id == b.id) THEN
+ *                      already = true
+ *                  ENDIF
+ *              ENDFOR
+ *              IF !already THEN
+ *                  a = temp
+ *                  b = temp.edges[j]
+ *                  distance = temp2
+ *              ENDIF
+ *          ENDIF
+ *      ENDFOR
+ *  ENDFOR
+ *  drawEdge(a, b, edges, app, true)
+ *  onMST.push(b)
+ *  FOR m = 0 TO notOnMST.size() DO
+ *      IF notOnMST[m].id == b.id THEN
+ *          notOnMST.erase[m]
+ *          BREAK
+ *      ENDIF
+ *  ENDFOR
+ * ENDWHILE
  *
  *
  */
 void buildMSTPrim(Graph g, GraphApp *app) {
     onMST.erase(onMST.begin(), onMST.end());
     notOnMST.erase(notOnMST.begin(), notOnMST.end());
-
-    // Write your code here
+// Add all nodes in graph to the not added vector
+    for(unsigned int i = 0; i < g.nodes.size(); i++)
+        notOnMST.push_back(g.nodes[i]);
+// Start with the first node in the vector and add it to the mst while removing from the not on mst vector
+    Node* a = notOnMST[0];
+    notOnMST.erase(notOnMST.begin(), notOnMST.begin()+1);
+    onMST.push_back(a);
+// While there are still unconnected nodes
+    while(notOnMST.size() > 0){
+        Node* a;
+        Node* b;
+        double dist = 1000000;
+// Look through every node already in MST
+        for(unsigned int i = 0; i < onMST.size(); i++){
+            Node* temp = onMST[i];
+// Look through all the adjacent nodes (edges) to this node
+            for(unsigned int j = 0; j < temp->edges.size(); j++){
+                double temp2 = temp->distance(*(temp->edges[j]));
+// Check if this is the least weighted path found yet 
+                if(temp2 < dist){
+                    bool already = false;
+// Check if the desired node is already connected to something else
+                    for(unsigned int k = 0; k < onMST.size(); k++)
+                        if(onMST[k]->id == temp->edges[j]->id)
+                            already = true;
+// If the node isn't already in the solutions then it's a possibility
+                    if(!already){
+                        a = temp;
+                        b = temp->edges[j];
+                        dist = temp2;
+                    }
+                }
+            }
+        }
+// Once you have both nodes for the edge, draw them
+        drawEdge(a, b, g.edges, app, true);
+// Add the new node to mst and remove from the not on mst vector
+        onMST.push_back(b);
+        for(int m = 0; (unsigned)m < notOnMST.size(); m++)
+            if(notOnMST[m]->id == b->id){
+                notOnMST.erase(notOnMST.begin()+m, (notOnMST.begin() + m + 1));
+                break;
+            }
+    }
 }
 
 /**
@@ -144,12 +225,100 @@ void buildMSTKruskal(Graph g, GraphApp *app) {
  *				to the MST, you can use the provided drawEdge function in
  *				GraphAlgorithms.cpp
  *
- * Add your outline here
- *
- *
+ * OUTLINE:
+ * onMST.erase(onMST.begin(), onMST.end())
+ * notOnMST.erase(notOnMST.begin(), notOnMST.end())
+ * Node* source = g.nodes[start]
+ * Node* goal = g.nodes[end]
+ * source->distance_to_start = 0
+ * source->previous = nullptr
+ * FOR i = 0 TO g.nodes.size() DO
+ *  IF g.nodes[i]->id != source->id THEN
+ *      g.nodes[i]->distance_to_start = 9999999
+ *      g.nodes[i]->previous = nullptr
+ *  ENDIF
+ * ENDFOR
+ * FOR i = 0 TO g.nodes.size() DO
+       notOnMST.push_back(g.nodes[i])
+ * ENDFOR
+ * WHILE notOnMST.size() > 0 DO
+ *  Node* a
+ *  double low = 99999999
+ *  int m = 0
+ *  FOR i = 0 TO notOnMST.size() DO
+ *      IF notOnMST[i]->distance_to_start < low THEN
+ *          a = notOnMST[i]
+ *          low = notOnMST[i]->distance_to_start
+ *          m = i
+ *      ENDIF
+ *  ENDFOR
+ *  notOnMST.erase(notOnMST.begin() + m, notOnMST.begin() + m + 1)
+ *  FOR i = 0 TO a->edges.size() DO
+ *    Node * v = a->edges[i]
+ *    double alt = a->distance_to_start + a->distance(*v)
+ *    IF alt < v->distance_to_start THEN
+ *      v->distance_to_start = alt
+ *      v->previous = a
+ *    ENDIF
+ *    ENDFOR
+ * ENDWHILE
+ * Node * current = goal
+ * WHILE current->id != source->id THEN
+ *   Node* next = current->previous
+ *   drawEdge(current, next, g.edges, app, false)
+ *   current = next
+ * ENDWHILE
+ * ENDFUNCTION
  */
+
 void findShortestPath(int start, int end, Graph g, GraphApp *app) {
-    // Write code here
+// Clear everything from before
+    onMST.erase(onMST.begin(), onMST.end());
+    notOnMST.erase(notOnMST.begin(), notOnMST.end());
+    Node* source = g.nodes[start];
+    Node* goal = g.nodes[end];
+// Distance from source to itself is zero and it has no previous node
+    source->distance_to_start = 0;
+    source->previous = nullptr;
+// Initialize all the other distances from source to a large number with no previous node and add them to not on MST
+    for(unsigned int i = 0; i < g.nodes.size(); i++){
+        if (g.nodes[i]->id != source->id){
+            g.nodes[i]->distance_to_start = 9999999;
+            g.nodes[i]->previous = nullptr;
+        }
+    }
+    for(unsigned int i = 0; i < g.nodes.size(); i++)
+       notOnMST.push_back(g.nodes[i]);
+// While there are still unadded nodes find the shortest path to them
+    while(notOnMST.size() > 0){
+        Node* a;
+        double low = 99999999;
+        int m = 0;
+// Update distance from source if there is a shorter path found using a 
+        for(unsigned int i = 0; i < notOnMST.size(); i++){
+            if(notOnMST[i]->distance_to_start < low){
+                a = notOnMST[i];
+                low = notOnMST[i]->distance_to_start;
+                m = i;
+            }
+        }
+// Remove from unadded since it's been visited
+        notOnMST.erase(notOnMST.begin() + m, notOnMST.begin() + m + 1);
+        for(unsigned int i = 0; i < a->edges.size(); i++){
+            Node * v = a->edges[i];
+            double alt = a->distance_to_start + a->distance(*v);
+            if(alt < v->distance_to_start){
+                v->distance_to_start = alt;
+                v->previous = a;
+            }
+        }
+    }
+    Node * current = goal;
+    while(current->id != source->id){
+        Node* next = current->previous;
+        drawEdge(current, next, g.edges, app, false);
+        current = next;
+    }
 }
 
 /**

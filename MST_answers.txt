@@ -1,0 +1,26 @@
+Question:
+What are the three most essential properties of a MST? Explain what each of these properties really means in terms of graphs and their properties.
+
+Answer:
+	One of the most essential properties of a MST is that it's a tree, meaning vertices are connected with edges. Therefore there is a set of vertices and a set of edges connecting them. Another essential property of a MST is that it's spanning therefore every vertex is connected to every other vertex, therefore there exists a path from one vertex to another vertex for every vertex in the tree. And the third essential property is that it's the minimum spanning tree, therefore out of all the trees that span (connect) every vertex to every other vertex (either directly or indirectly), this one is done with the minimum sum of edge weights. So if every edge is assigned a weight, for example a distance, and we sum all these edge weights, the minimum spanning tree is the one with the lowest sum. One consequence of this is that no cycles are allowed, so if two vertices are already linked via an edge, linking them again via another edge would be redundant and make the sum of edge weights more than the minimum it can be. 
+
+Question:
+Suppose we start off only with one node in our candidate tree. For the next step, we should pick an adjacent node and its edge to add to the tree. Which should we pick? Justify your answer.
+
+Answer:
+	We should look at all the adjacent nodes to the original node and pick the one with the lowest edge weight. Why? Because this guarantees us that there is no shorter path between the original node and the node it is linked to, while for the other nodes there might be a shorter path to get there from the original node, namely from the original node to the closest (least edge weight) node and then from that node to other adjacent nodes. Therefore we should pick the edge with the smallest weight between the two nodes, and if there's a tie just pick one. 
+
+Question:
+Now we have two (or three, or N) nodes in our candidate tree. Which nodes and edges should we pick at each subsequent step, and why? How do we know when we're finished, and why? (In the literature, this method is known as Prim's algorithm.)
+	
+Answer:
+    At each subsequent step you look at the set of E, the set of all edges, and you find the one with the least edge weight that links one of the current nodes in our candidate tree with one that isn't already in the candidate tree. Why? Well we want the least edge weight for the same reasons as the previous question and we want to connect one current node to a node not currently in the candidate tree because otherwise we would be connecting two vertices that were already connected which is redundant and would add an uncessesary weight to our tree We know we're finished when every vertex is associated with an edge in our candidate tree because then the tree spans all the vertices and adding any more edges would be redundant and no longer make it the MST. Removing any edges would make it no longer be spanning and therefore also not a MST.
+    
+Question:
+Suppose that we instead start off with a lot of candidate trees - one per node, in fact. We can join trees at will by picking edges. Which edge should we pick at each step? When do we stop? Justify your answers. (In the literature, this method is known as Kruskal's algorithm.)
+
+Answer:
+    In this scenario we start with a graph basically consisting of just nodes but no edges connecting them. However we have a list of all possible edges connecting two adjacent nodes and their edge weights. At each step look at this list and pick the edge with the least edge weight such that you are not creating a cycle, and not already in the solution set of edges. Why? Because we know that the edge with the least edge weight is going to be in the solution since it's the least possible way to link two specific nodes that aren't already linked. And if two nodes are already linked, then adding an edge between them would create a cycle and it would unecessarily increase the weight of the tree therefore no longer making it a minimum spanning tree. We know when to stop when there are no more edges that aren't in the soluton set that can be added and not create a cycle, because this would mean that all the nodes, or candidate trees, are linked to eachother directly/indirectly with edges. 
+
+
+
